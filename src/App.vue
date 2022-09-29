@@ -1,43 +1,92 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 const state = ref("init");
 
-const amount = ref(1000);
+const amount = ref(0);
 
-const name = ref("Jack");
-const salary = ref(1500);
+const name = ref("");
+const salary = ref(0);
 
-const billId = ref("123456");
+const billId = ref("");
 
-const persons = ref([
-  {
-    name: "John",
-    salary: 1000,
-  },
-  {
-    name: "Jane",
-    salary: 2000,
-  },
-]);
+const persons = ref([]);
+
+onMounted(() => {
+  // if local storage has bill id, use it
+  if (localStorage.getItem("billId")) {
+    billId.value = localStorage.getItem("billId");
+    changeState("created");
+    // fetch bill data
+    fetchBill().then((res) => {
+      res.json().then((data) => {
+        persons.value = data.persons;
+        amount.value = data.amount;
+      });
+    });
+  }
+});
 
 function changeState(newState) {
   state.value = newState;
 }
 
-function createBill() {
-  changeState("created");
+async function createBill() {
+  const res = await fetch("http://localhost:3000/api/bills", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      amount: amount.value,
+    }),
+  });
+  const data = await res.json();
+  if (data.id) {
+    billId.value = data.id;
+    window.localStorage.setItem("billId", billId.value);
+    changeState("created");
+  }
 }
 
-function joinBillFromCode() {
-  // TODO: Fetch bill from server and assign to billId
-  changeState("created");
+async function joinBillFromCode() {
+  const res = await fetchBill();
+  const data = await res.json();
+  if (data) {
+    billId.value = data.id;
+    amount.value = data.amount;
+    persons.value = data.persons;
+    // push billId to url
+    window.localStorage.setItem("billId", billId.value);
+    changeState("created");
+  }
 }
-function addPerson() {
-  persons.value.push({
-    name: name.value,
-    salary: salary.value,
+
+async function fetchBill() {
+  return fetch("http://localhost:3000/api/bills/" + billId.value, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
+}
+async function addPerson() {
+  const res = await fetch("http://localhost:3000/api/bills/" + billId.value, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: name.value,
+      salary: salary.value,
+    }),
+  });
+  const data = await res.json();
+  if (data) {
+    persons.value = data;
+    name.value = "";
+    salary.value = 0;
+  }
 }
 
 function getPercent(person) {
@@ -55,6 +104,11 @@ const totalSalaries = computed(() => {
 
 function getFairPayAmount(person) {
   return Math.round(getPercent(person) * amount.value, 2);
+}
+
+function leaveBill() {
+  window.localStorage.removeItem("billId");
+  changeState("init");
 }
 </script>
 
@@ -105,6 +159,7 @@ function getFairPayAmount(person) {
         </tr>
       </tbody>
     </table>
+    <button @click="leaveBill()" class="btn btn-small">Leave bill</button>
   </template>
 </template>
 
