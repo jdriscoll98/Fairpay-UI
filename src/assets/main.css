@@ -2,10 +2,23 @@
 
 #app { 
   height: 100%;
-  background-color: var(--vt-c-green);
+  background-color: var(--color-background);
   padding: 0.5rem;
 }
 
+.app-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  max-width: 600px;
+  margin: auto;
+
+}
+
+.app-container-created {
+  justify-content: flex-start;
+}
 h1.main-heading {
   color: var(--color-heading);
   font-weight: 700;
@@ -37,12 +50,16 @@ h1.main-heading {
   color: black;
 }
 
+.btn-important {
+  background-color: #ff020286;
+  color: white;
+}
+
 .form-label {
-  color: var(--vt-c-white);
+  color: var(--color-text);
   display: block;
   font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
   text-align: center;
 }
 
@@ -55,6 +72,7 @@ h1.main-heading {
   margin-bottom: 1rem;
   padding: 1rem;
   width: 100%;
+  text-align: center;
 }
 
 .sub-heading {
@@ -93,4 +111,16 @@ h1.main-heading {
 }
 .person-form-container input {
   max-width: 50%;
+}
+
+.error-text {
+  color: var(--color-error);
+  text-align: center;
+  min-height: 1.5rem;
+}
+
+.create-menu, .join-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
