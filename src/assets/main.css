@@ -2,7 +2,7 @@
 
 #app { 
   height: 100%;
-  background-color: var(--color-background);
+  background-color: var(--vt-c-green);
   padding: 0.5rem;
 }
 
@@ -17,7 +17,7 @@ h1.main-heading {
 .btn {
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 0.5rem;
-  color: var(--color-text);
+  color: var(--vt-c-white);
   display: block;
   font-size: 1.5rem;
   margin: 1rem auto;
@@ -38,7 +38,7 @@ h1.main-heading {
 }
 
 .form-label {
-  color: var(--color-heading);
+  color: var(--vt-c-white);
   display: block;
   font-size: 1.5rem;
   font-weight: 700;
