@@ -32,7 +32,7 @@ function changeState(newState) {
 }
 
 async function createBill() {
-  const res = await fetch("http://localhost:3000/api/bills", {
+  const res = await fetch("http://137.184.221.21:3000/api/bills", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -63,7 +63,7 @@ async function joinBillFromCode() {
 }
 
 async function fetchBill() {
-  return fetch("http://localhost:3000/api/bills/" + billId.value, {
+  return fetch("http://137.184.221.21:3000/api/bills/" + billId.value, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -71,16 +71,19 @@ async function fetchBill() {
   });
 }
 async function addPerson() {
-  const res = await fetch("http://localhost:3000/api/bills/" + billId.value, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: name.value,
-      salary: salary.value,
-    }),
-  });
+  const res = await fetch(
+    "http://137.184.221.21:3000/api/bills/" + billId.value,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name.value,
+        salary: salary.value,
+      }),
+    }
+  );
   const data = await res.json();
   if (data) {
     persons.value = data;
